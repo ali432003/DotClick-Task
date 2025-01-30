@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 export const auth = async(req,res,next) =>{
     try {
-        const token = req.header.authorization
+        const token = req.header.authorization.split(" ")
     
         if(!token || token[1] !== 'Bearer'){
             return res.status(400).json({message: 'Invalid Token'})
