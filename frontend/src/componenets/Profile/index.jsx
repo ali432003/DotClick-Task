@@ -14,16 +14,16 @@ const Index = () => {
   const [isDis, setIsDis] = useState(true);
   const [load, setLoad] = useState(false);
   const [imgload, setImgLoad] = useState(false);
-  const [updValue, setUpdValue] = useState({ name: "", age: 0, img: "" });
+  const [updValue, setUpdValue] = useState({ name: "", phoneNumber: 0, img: "" });
   const [imageSrc, setImageSrc] = useState(""); // State variable for image source
 
   useEffect(() => {
     setUpdValue({
       name: CurrUser.data?.name,
-      age: CurrUser.data?.age,
+      phoneNumber: CurrUser.data?.phoneNumber,
     });
   }, [CurrUser]);
-
+  
   const editStart = () => {
     setIsDis(!isDis);
   };
@@ -53,7 +53,6 @@ const Index = () => {
     }
     setLoad(false);
   };
-
   const handleFileChange = async (e) => {
     setImgLoad(true);
     e.preventDefault();
@@ -174,12 +173,7 @@ const Index = () => {
             >
               <h1 className="col-span-3 flex lg:flex-row flex-col gap-y-5 lg:gap-y-0 justify-between">
                 ID : {CurrUser.data?._id}{" "}
-                <div>
-                  {" "}
-                  <div className="flex">
-                    <h1>createAt : {CurrUser.data?.createAt.slice(0, 10)}</h1>
-                  </div>
-                </div>
+                
               </h1>
               <h1 className="lg:flex lg:flex-col">
                 <label className="flex gap-x-1">
@@ -214,7 +208,7 @@ const Index = () => {
               </h1>
               <h1 className="lg:flex lg:flex-col">
                 <label className="flex gap-x-1">
-                  Age{" "}
+                  Phone Number{" "}
                   {
                     <span
                       className={
@@ -229,7 +223,7 @@ const Index = () => {
                 <input
                   className="bg-slate-200 p-1 border border-slate-400 rounded-lg focus:outline-none focus:ring focus:ring-slate-300 text-black"
                   type="number"
-                  defaultValue={CurrUser.data?.age}
+                  defaultValue={CurrUser.data?.phoneNumber}
                   onChange={(e) =>
                     handleChange("age", parseInt(e.target.value))
                   }

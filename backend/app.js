@@ -7,7 +7,6 @@ import { cloudinaryConfig } from './config/cloudinaryConfig.js';
 
 const app = express() 
 
-// configure env
 dotenv.config({path : "./config.env"})
 const port = process.env.PORT || 8010 
 

@@ -34,6 +34,7 @@ export const fetchUser = createAsyncThunk(('CurrUser/fetch'), async (obj, { reje
         const id = localStorage.getItem('uid')
 
         const res = await axios.get(`${BASE_URL}/getuser/${id}`)
+        console.log(res)
         return res.data
 
         // ToastAlert("user is not logged in","error")
