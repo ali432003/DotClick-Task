@@ -48,6 +48,7 @@ export const deleteCartItem = async (req, res) => {
 export const makePayment = async (req, res) => {
 
   try {
+    const uid = req.user._id
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -55,7 +56,7 @@ export const makePayment = async (req, res) => {
 
         return {
           price_data: {
-            currency: "usd",
+            currency: "pkr",
             product_data: {
               name: item.name,
             },
@@ -67,6 +68,7 @@ export const makePayment = async (req, res) => {
       success_url: process.env.SUCCESS_URL,
       cancel_url: process.env.CANCEL_URL,
     })
+    await Cart.deleteMany({uid: uid})
     res.json({ url: session.url })
   } catch (e) {
     res.status(500).json({ error: e.message })

@@ -78,13 +78,21 @@ export default function CartModal({ openButton, setOpenButton }) {
   const makeStripePayment = async () => {
     try {
       let item = CartItem;
-      const res = await axios.post(`${BASE_URL}/payment`, {
-        items: item.map(({ name, price, quantity }) => ({
-          name,
-          price,
-          quantity,
-        })),
-      });
+      const res = await axios.post(
+        `${BASE_URL}/payment`,
+        {
+          items: item.map(({ name, price, quantity }) => ({
+            name,
+            price,
+            quantity,
+          })),
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
 
       window.open(res.data.url);
     } catch (error) {

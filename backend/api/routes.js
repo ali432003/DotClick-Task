@@ -43,7 +43,7 @@ router.get(("/getcartitem"),auth, getCartItem)
 router.delete(("/deletecartitem/:id"),auth, deleteCartItem)
 
 // Stripe Payment Gateway API
-router.post("/payment", makePayment)
+router.post("/payment",auth, makePayment)
 
 
 //Images API
