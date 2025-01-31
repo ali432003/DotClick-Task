@@ -22,6 +22,8 @@ const index = () => {
       if (data.status) {
         const uid = data.data._id;
         localStorage.setItem("uid", uid);
+        const authHeader = res.headers['authorization'].split(" ");
+        if(authHeader) localStorage.setItem('token', authHeader[1])
         setFormData({ name: "", password: "" });
         setLoad(false);
         ToastAlert(data.message, "success");

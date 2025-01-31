@@ -31,10 +31,11 @@ export default function index({ name, img, price, desc, category, id }) {
       return;
     }
     try {
-      const res = await axios.post(`${BASE_URL}/addToCart`, cartData);
+      const token = localStorage.getItem('token')
+      const res = await axios.post(`${BASE_URL}/addToCart`, cartData, {headers:{'Authorization':`Bearer ${token}`}});
       if (res.data.status) {
         console.log(res.data);
-        const resOfCart = await axios.get(`${BASE_URL}/getcartitem/${uid}`)
+        const resOfCart = await axios.get(`${BASE_URL}/getcartitem`,{headers:{'Authorization':`Bearer ${token}`}})
         if (resOfCart.data.status) {
           dispatch(increment(resOfCart.data.data))
         }

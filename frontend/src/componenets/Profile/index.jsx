@@ -31,13 +31,13 @@ const Index = () => {
   const handleChange = (key, value) => {
     setUpdValue((prev) => ({ ...prev, [key]: value }));
   };
-
+  const token = localStorage.getItem('token')
   const saveHandler = async () => {
     setLoad(true);
     try {
       const res = await axios.put(
-        `${BASE_URL}/updateuser/${CurrUser.data._id}`,
-        updValue
+        `${BASE_URL}/updateuser`,
+        updValue,{headers:{'Authorization': `Bearer ${token}`}}
       );
       if (res.data.status) {
         setUpdValue(res.data.data);
@@ -70,14 +70,15 @@ const Index = () => {
       const resp = await axios.post(`${BASE_URL}/imageupload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${token}`
         },
       });
 
       if (resp.data.status) {
         const userImg = resp.data.data.url;
         const imgRes = await axios.put(
-          `${BASE_URL}/updateuser/${CurrUser.data._id}`,
-          { img: userImg }
+          `${BASE_URL}/updateuser`,
+          { img: userImg },{headers:{'Authorization':`Bearer ${token}`}}
         );
         ToastAlert("Image uploaded successfully", "info");
         setImageSrc(imgRes.data.data.img);
@@ -222,10 +223,10 @@ const Index = () => {
                 </label>
                 <input
                   className="bg-slate-200 p-1 border border-slate-400 rounded-lg focus:outline-none focus:ring focus:ring-slate-300 text-black"
-                  type="number"
+                  type="tel"
                   defaultValue={CurrUser.data?.phoneNumber}
                   onChange={(e) =>
-                    handleChange("age", parseInt(e.target.value))
+                    handleChange("phoneNumber", parseInt(e.target.value))
                   }
                   disabled={isDis}
                 />

@@ -3,7 +3,7 @@ import { getUser, login, signup, updateUser } from "../controllers/userControlle
 import { addProd, deleteProd, getProd, updateProd } from "../controllers/productController.js";
 import upload from "../middlewares/multer.js";
 import { cloudinaryUploader } from "../config/cloudinaryConfig.js";
-import { imageUpload } from "../controllers/imageUpload.js"
+import { imageUpload, prodImage } from "../controllers/imageUpload.js"
 import { addToCart, deleteCartItem, getCartItem } from "../controllers/cartController.js";
 import { loginAdmin, registerAdmin } from "../controllers/adminControllers.js";
 import { auth } from "../middlewares/jwt.js";
@@ -20,9 +20,9 @@ router.post(("/signup"), signup)
 
 router.post("/login", login);
 
-router.put(('/updateuser/:id'),auth, updateUser)
+router.put(('/updateuser'),auth, updateUser)
 
-router.get(('/getuser/:id'),auth, getUser)
+router.get(('/getuser'),auth, getUser)
 
 
 // Product Apis
@@ -36,17 +36,17 @@ router.delete(("/deleteprod/:id"), deleteProd)
 
 
 // Cart API
-router.post(("/addtocart"), addToCart)
+router.post(("/addtocart"),auth, addToCart)
 
-router.get(("/getcartitem/:uid"), getCartItem)
+router.get(("/getcartitem"),auth, getCartItem)
 
-router.delete(("/deletecartitem/:id"), deleteCartItem)
+router.delete(("/deletecartitem/:id"),auth, deleteCartItem)
 
 
 //Images API
-router.post("/imageupload", upload.single("userImg"), imageUpload)
+router.post("/imageupload",auth, upload.single("userImg"), imageUpload)
 
-router.post("/prodImgupload", upload.single("productImg"), imageUpload)
+router.post("/prodImgupload", upload.single("productImg"), prodImage)
 
 // Admin API
 router.post(("/registerAdmin"), registerAdmin)

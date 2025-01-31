@@ -35,7 +35,7 @@ export const loginAdmin = async (req,res)=>{
         if (admin) {
             const isMatch = await bcrypt.compare(password, admin.password);
             if (isMatch) {
-                const token = jwt.sign({ _id: admin._id, email: admin.email }, "PRIVATEKEY")
+                const token = jwt.sign({ _id: admin._id, email: admin.email }, process.env.SECRET)
                 res.json({ status: true, data: admin, message: "Admin logged in successfully", token });
             } else {
                 res.json({ status: false, data: [], message: "Incorrect password" });

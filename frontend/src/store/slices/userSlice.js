@@ -19,6 +19,7 @@ export const userSlice = createSlice({
         })
         builder.addCase(fetchUser.fulfilled, (state, action) => {
             state.loading = false
+            
             state.CurrUser = action.payload
         })
         builder.addCase(fetchUser.rejected, (state, action) => {
@@ -31,9 +32,8 @@ export const userSlice = createSlice({
 
 export const fetchUser = createAsyncThunk(('CurrUser/fetch'), async (obj, { rejectWithValue }) => {
     try {
-        const id = localStorage.getItem('uid')
-
-        const res = await axios.get(`${BASE_URL}/getuser/${id}`)
+        const token = localStorage.getItem('token')
+        const res = await axios.get(`${BASE_URL}/getuser`,{headers: {'Authorization':`Bearer ${token}`}})
         console.log(res)
         return res.data
 

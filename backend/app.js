@@ -19,7 +19,7 @@ mongoose.connect(DB).then(()=>{
 // JSON body parser and cors
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({ origin: "*" }))
+app.use(cors({ origin: "*",exposedHeaders: ['Authorization'] }))
 
 //Cloudinary Config
 cloudinaryConfig()

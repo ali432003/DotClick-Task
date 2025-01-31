@@ -2,7 +2,8 @@ import Cart from "../model/cartSchema.js"
 
 export const addToCart = async (req, res) => {
     try {
-        const { uid, name, img, price, category } = req.body
+        const uid = req.user._id
+        const {  name, img, price, category } = req.body
         if (!uid) {
             res.json({ status: false, data: [], message: "unknown cart product" })
             return
@@ -18,7 +19,7 @@ export const addToCart = async (req, res) => {
 
 export const getCartItem = async (req, res) => {
     try {
-        const _uid = req.params.uid
+        const _uid = req.user._id
         const cartItem = await Cart.find({ uid: _uid })
         res.status(201).json({ data: cartItem, status: true, message: "cart item is found" })
     } catch (error) {
@@ -29,7 +30,7 @@ export const getCartItem = async (req, res) => {
 export const deleteCartItem = async (req, res) => {
     try {
         const id = req.params.id
-        const { uid } = req.body
+        const  uid = req.user._id 
         const deleteItem = await Cart.findOneAndDelete({ _id: id, uid: uid })
         res.status(201).json({ data: deleteItem, status: true, message: "Item deleted Successfully" })
     } catch (error) {

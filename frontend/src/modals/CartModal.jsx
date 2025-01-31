@@ -21,16 +21,18 @@ export default function CartModal({ openButton, setOpenButton }) {
   const handleClose = () => {
     setOpenButton(false);
   };
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [CartItem, setCartItem] = useState([]);
+  const token = localStorage.getItem("token");
+  const uid = localStorage.getItem("uid");
 
   const fetchData = async () => {
-    const uid = localStorage.getItem("uid");
     try {
-      const res = await axios.get(`${BASE_URL}/getcartitem/${uid}`);
+      const res = await axios.get(`${BASE_URL}/getcartitem`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
       if (res.data.status) {
-        console.log(res.data.data);
-        dispatch(increment(res.data.data))
+        dispatch(increment(res.data.data));
         setCartItem(res.data.data);
         return;
       }
@@ -55,17 +57,17 @@ export default function CartModal({ openButton, setOpenButton }) {
   };
 
   const totalSum = Sum(CartItem.map((item) => item.price));
-  
+
   const handleDelete = async (id, uid) => {
     try {
       const resOfDelete = await axios.delete(
         `${BASE_URL}/deletecartitem/${id}`,
-        { data: { uid: uid } }
+        { data: { uid: uid }, headers: { 'Authorization': `Bearer ${token}` } }
       );
+      console.log(resOfDelete)
       if (resOfDelete.data.status) {
-        fetchData()
-        ToastAlert(resOfDelete.data.message, "info")
-
+        fetchData();
+        ToastAlert(resOfDelete.data.message, "info");
       }
     } catch (error) {
       ToastAlert(error.message, "error");

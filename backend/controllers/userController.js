@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken"
 
 export const signup = async (req, res) => {
     try {
-        const { email, name, age, password,img } = req.body
-        if (!email || !name || !password || !age) {
+        const { email, name, phoneNumber, password,img } = req.body
+        if (!email || !name || !password || !phoneNumber) {
             res.json({ message: "Fill all Fields", status: false })
             return
         }
@@ -33,8 +33,9 @@ export const login = async (req, res) => {
         if (user) {
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
-                const token = jwt.sign({ _id: user._id, email: user.email }, "PRIVATEKEY")
-                res.json({ status: true, data: user, message: "User logged in successfully", token });
+                const token = jwt.sign({ _id: user._id, email: user.email }, process.env.SECRET)
+                res.setHeader('Authorization', `Bearer ${token}`);
+                res.json({ status: true, data: user, message: "User logged in successfully" });
             } else {
                 res.json({ status: false, data: [], message: "Incorrect password" });
             }
@@ -48,7 +49,7 @@ export const login = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const _id = req.params.id
+        const _id = req.user._id
         const updUser = await User.findByIdAndUpdate(_id, req.body, { new: true })
         res.json({ status: true, message: "user updated", data: updUser })
 
@@ -59,7 +60,7 @@ export const updateUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
     try {
-        const _id = req.params.id
+        const _id = req.user._id
         const CurrUser = await User.findOne({ _id: _id })
         if (CurrUser) {
             return res.json({ message: "user found", data: CurrUser, status: true })

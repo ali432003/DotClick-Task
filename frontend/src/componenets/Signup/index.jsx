@@ -11,7 +11,7 @@ const index = () => {
   const [FormData, setFormData] = useState({
     email: "",
     name: "",
-    age: 0,
+    phoneNumber: 0,
     password: "",
   });
   
@@ -20,7 +20,7 @@ const index = () => {
     setLoad(true);
     try {
       const res = await axios.post(`${BASE_URL}/signup`, FormData);
-      setFormData({ name: "", email: "", age: 0, password: "" });
+      setFormData({ name: "", email: "", phoneNumber: 0, password: "" });
       setLoad(false)
       ToastAlert(res.data.message, "success");
       nav("/login");
@@ -90,20 +90,18 @@ const index = () => {
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Your Age
+                    Your PH#
                   </label>
                   <input
                     type="number"
-                    min="18"
-                    max="100"
-                    title="Age should be in betwee 18 and 100"
+                    title="Mobile Number"
                     onChange={(e) =>
                       setFormData({
                         ...FormData,
-                        age: parseInt(e.target.value),
+                        phoneNumber: parseInt(e.target.value),
                       })
                     }
-                    placeholder="Your Age"
+                    placeholder="Your Phone Number"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
