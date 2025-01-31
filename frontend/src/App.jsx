@@ -19,12 +19,18 @@ import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide, ToastContainer } from "react-toastify";
+import PaymentSuccessPage from "./componenets/Success";
+import PaymentCancelPage from "./componenets/Cancel";
 
 function App() {
   const location = useLocation();
 
   const isSignupOrLogin = () => {
-    return location.pathname === "/signup" || location.pathname === "/login" || location.pathname === "/dashboard";
+    return (
+      location.pathname === "/signup" ||
+      location.pathname === "/login" ||
+      location.pathname === "/dashboard"
+    );
   };
 
   return (
@@ -35,6 +41,8 @@ function App() {
         <Route path="/product" element={<Product />} />
         <Route element={<PrivRoute />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/paymentS" element={<PaymentSuccessPage />} />
+          <Route path="/paymentC" element={<PaymentCancelPage />} />
         </Route>
         <Route element={<AuthRoute />}>
           <Route path="/signup" element={<Signup />} />

@@ -1,13 +1,11 @@
+import 'dotenv/config'
 import express from "express"
 import mongoose from "mongoose"
-import dotenv from "dotenv"
 import router from "./api/routes.js"
 import cors from "cors"
 import { cloudinaryConfig } from './config/cloudinaryConfig.js';
 
 const app = express() 
-
-dotenv.config({path : "./config.env"})
 const port = process.env.PORT || 8010 
 
 // MongoDB connection

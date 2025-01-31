@@ -16,12 +16,14 @@ import TableBody from "@mui/material/TableBody";
 import { Close, CloseRounded } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { increment } from "../store/slices/cartCountSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function CartModal({ openButton, setOpenButton }) {
   const handleClose = () => {
     setOpenButton(false);
   };
   const dispatch = useDispatch();
+  const nav = useNavigate()
   const [CartItem, setCartItem] = useState([]);
   const token = localStorage.getItem("token");
   const uid = localStorage.getItem("uid");
@@ -29,7 +31,7 @@ export default function CartModal({ openButton, setOpenButton }) {
   const fetchData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/getcartitem`, {
-        headers: { 'Authorization': `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.status) {
         dispatch(increment(res.data.data));
@@ -62,9 +64,9 @@ export default function CartModal({ openButton, setOpenButton }) {
     try {
       const resOfDelete = await axios.delete(
         `${BASE_URL}/deletecartitem/${id}`,
-        { data: { uid: uid }, headers: { 'Authorization': `Bearer ${token}` } }
+        { data: { uid: uid }, headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(resOfDelete)
+      console.log(resOfDelete);
       if (resOfDelete.data.status) {
         fetchData();
         ToastAlert(resOfDelete.data.message, "info");
@@ -73,7 +75,22 @@ export default function CartModal({ openButton, setOpenButton }) {
       ToastAlert(error.message, "error");
     }
   };
+  const makeStripePayment = async () => {
+    try {
+      let item = CartItem;
+      const res = await axios.post(`${BASE_URL}/payment`, {
+        items: item.map(({ name, price, quantity }) => ({
+          name,
+          price,
+          quantity,
+        })),
+      });
 
+      window.open(res.data.url);
+    } catch (error) {
+      ToastAlert(error.message,'error')
+    }
+  };
   return (
     <Modal open={openButton} onClose={handleClose}>
       <ModalDialog>
@@ -91,6 +108,7 @@ export default function CartModal({ openButton, setOpenButton }) {
                   <TableCell>Name</TableCell>
                   <TableCell>Price</TableCell>
                   <TableCell>Category</TableCell>
+                  <TableCell>Quantity</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -112,6 +130,7 @@ export default function CartModal({ openButton, setOpenButton }) {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>${item.price}</TableCell>
                     <TableCell>{item.category}</TableCell>
+                    <TableCell>{item?.quantity}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
@@ -121,7 +140,12 @@ export default function CartModal({ openButton, setOpenButton }) {
                     <strong>Total : {"$" + totalSum}</strong>
                   </TableCell>
                   <TableCell>
-                    <Button size="small" color="secondary" variant="contained">
+                    <Button
+                      size="small"
+                      color="secondary"
+                      variant="contained"
+                      onClick={makeStripePayment}
+                    >
                       Proceed
                     </Button>
                   </TableCell>

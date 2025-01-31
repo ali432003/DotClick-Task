@@ -34,9 +34,11 @@ export default function index({ name, img, price, desc, category, id }) {
       const token = localStorage.getItem('token')
       const res = await axios.post(`${BASE_URL}/addToCart`, cartData, {headers:{'Authorization':`Bearer ${token}`}});
       if (res.data.status) {
-        console.log(res.data);
         const resOfCart = await axios.get(`${BASE_URL}/getcartitem`,{headers:{'Authorization':`Bearer ${token}`}})
         if (resOfCart.data.status) {
+
+          console.log(resOfCart.data.data)
+          
           dispatch(increment(resOfCart.data.data))
         }
         ToastAlert(res.data.message, "success");
